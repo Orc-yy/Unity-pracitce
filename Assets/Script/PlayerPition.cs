@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public class PlayerPition : MonoBehaviour
 {
     Rigidbody2D rigid;
@@ -9,27 +10,29 @@ public class PlayerPition : MonoBehaviour
     Animator anim;
     Vector3 dirVec;
     GameObject scanObject;
+    public GameManager manager;
+  
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        
     }
 
-    
+
     void Update()
     {
         //Move value
-        h = Input.GetAxisRaw("Horizontal");
-        v = Input.GetAxisRaw("Vertical");
+        h = manager.isAction ? 0 : Input.GetAxisRaw("Horizontal");
+        v = manager.isAction ? 0 : Input.GetAxisRaw("Vertical");
 
 
         //Check Button Down & Up
-        bool hDown = Input.GetButtonDown("Horizontal");
-        bool vDown = Input.GetButtonDown("Vertical");
-        bool hUp = Input.GetButtonUp("Horizontal");
-        bool vUp = Input.GetButtonUp("Vertical");
-
+        bool hDown = manager.isAction ? false : Input.GetButtonDown("Horizontal");
+        bool vDown = manager.isAction ? false : Input.GetButtonDown("Vertical");
+        bool hUp = manager.isAction ? false : Input.GetButtonUp("Horizontal");
+        bool vUp = manager.isAction ? false : Input.GetButtonUp("Vertical");
 
         //Check Horizontal Move
         if (hDown)
@@ -65,11 +68,11 @@ public class PlayerPition : MonoBehaviour
 
         //Scan
         if (Input.GetButtonDown("Jump") && scanObject != null)
-            Debug.Log("this is : "+scanObject.name);
         {
-
+            manager.Action(scanObject);
+            
         }
-
+    
     }
 
      void FixedUpdate()
@@ -90,4 +93,6 @@ public class PlayerPition : MonoBehaviour
         else
             scanObject = null;
     }
+    
+
 }
